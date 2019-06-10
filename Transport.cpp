@@ -1,398 +1,194 @@
+
 #include <iostream>
 #include <time.h>
 #include <string>
 #include <memory> 
+#include <cstdio>
 
 using namespace std;
 
-
 class Transport {
 
-	public:
+public:
 
-		virtual float go(float *) = 0;
-		virtual bool stop() = 0;
-		virtual void load() = 0;
+	virtual float go(float *) = 0;
+	virtual bool stop() = 0;
+	virtual void load() = 0;
 
 };
+
 
 class LandTransport : public Transport {
 
-	protected:
+protected:
 
-		int seet_quantity, door_quantity, window_quantity;
-		bool radio, air_conditioning;
-		
-	public:
+	int seet_quantity = 0, door_quantity = 0, window_quantity = 0;
+	bool radio, air_conditioning;
 
-		virtual int stay_in_traffic_jam() = 0;
+public:
 
-		LandTransport() {}
-		LandTransport(int sq, int dq, int windq) : seet_quantity(sq), door_quantity(dq), window_quantity(windq) {}
+	virtual int stay_in_traffic_jam() = 0;
 
-		float go(float * velocity) {return 0;}
-		bool stop() { return 0; }
-		void load() {}
+	LandTransport() {}
+	LandTransport(int sq, int dq, int windq, bool r, bool air) : seet_quantity(sq), door_quantity(dq), window_quantity(windq),
+		radio(r), air_conditioning(air) {}
+	virtual ~LandTransport() {}
+
+	float go(float * velocity) { return 0; }
+	bool stop() { return 0; }
+	void load() {}
 
 };
+
 
 class RailVechicle : public LandTransport {
-	   	
-	protected:
 
-		int carriage_quantity;
+protected:
 
-	public:
-		RailVechicle() {}
-		RailVechicle(int carrq) : carriage_quantity(carrq) {}
+	int carriage_quantity;
+
+public:
+	RailVechicle() {}
+	RailVechicle(int carrq) : carriage_quantity(carrq) {}
+	virtual ~RailVechicle() {}
 };
 
-class MotorVechicles : public LandTransport{
+class MotorVechicles : public LandTransport {
 
-	protected:
+protected:
 
-		int wheels_quantity;	
-		string brand;
+	int wheels_quantity;
+	string brand;
 
-	public:
+public:
 
-		MotorVechicles() {}
-		MotorVechicles(int wq, int sq, int dq, int windq, string br) : wheels_quantity(wq), LandTransport (sq, dq, windq), brand(br) {}
+	MotorVechicles() {}
+	MotorVechicles(int wq, int sq, int dq, int windq, bool r, bool air, string br) : wheels_quantity(wq), LandTransport(sq, dq, windq, r, air), brand(br) {}
 
-		float go(float *) { return 0; }
-		bool stop() { return false; }
-		void load() {}
-		int stay_in_traffic_jam() { return 0; }
+	float go(float *) { return 0; }
+	bool stop() { return false; }
+	void load() {}
+	int stay_in_traffic_jam() { return 0; }
+
+	int & getWheels() { return  wheels_quantity; }
+	int getSeets() { return seet_quantity; }
+	int getDoors() { return door_quantity; }
+	int getWindow() { return window_quantity; }
+	string getBrand() { return brand; }
+	bool getRadio() { return radio; }
+	bool getAirCond() { return air_conditioning; }
 };
 
-class Train : public RailVechicle{
+class Train : public RailVechicle {
 
-	protected:
+protected:
 
-		string name, marka;
+	string name, marka;
 
-	public:
+public:
 
-		Train(string _name, string _marka, int _carriage_quantity) : name(_name), marka(_marka), RailVechicle (_carriage_quantity) {}
+	Train(string _name, string _marka, int _carriage_quantity) : name(_name), marka(_marka), RailVechicle(_carriage_quantity) {}
 
 };
 
 class Carriage : public LandTransport {
-	   	
-	
+
+
 };
 
 
 class Car : public MotorVechicles {
-	
-	string name, silnik, felgi; //brand;
-	int  dist;
-	//int wheelq, seetq, doorq, windowsq,
 
-		
-	public:
+	string silnik, brand = getBrand();
+	float distance = 0;
+	int wheelq = getWheels(), seetq = getSeets(), doorq = getDoors(), windowsq = getWindow();
+	bool rad = getRadio(), air = getAirCond();
 
-		Car() {}
-		Car(string _name, string _silnik, string _felgi, int wq, int sq, int dq, int windq, string _brand) : name (_name), 
-																							  silnik(_silnik), felgi(_felgi),
-																							  MotorVechicles (wq, sq, dq, windq, _brand) {}
+public:
 
-		//Car(const Car &_car) {
-		//
-		//	this->name = _car.name;
-		//	this->silnik = _car.silnik;
-		//	this->felgi = _car.felgi;
-		//	wheels_quantity = _car.wheelq;
-		//    seet_quantity = _car.seetq;
-		//	door_quantity = _car.doorq;
-		//	window_quantity = _car.windowsq;
-		//	brand = _car.brand;
-		//	
-		//}
+	Car() {}
+	Car(string _silnik, int wq, int sq, int dq, int windq, string _brand, bool _r, bool _air) :
+		silnik(_silnik),
+		MotorVechicles(wq, sq, dq, windq, _r, _air, _brand) {}
 
-		void setName(string n)   { name = n; }
-		void setSilnik(string s) { silnik = s; }
-		void setFelgi(string f)  { felgi = f; }		
-		void setWheels(int wh)   { wheels_quantity = wh; }
-		void setSeets(int sits)  {seet_quantity = sits; }
-		void setDoors(int doors) {door_quantity = doors;}
-		void setWindows(int window) { window_quantity = window; }
-		void setBrand(string _brand)   { brand = _brand; }
-		void if_exist_Radio(bool rad) { radio = rad; }
-		void if_air_conditioning(bool air_cond) { air_conditioning = air_cond; }
-
-
-		float go(float *v) { 
-			
-
-			bool x;
-			time_t start, end;
-			time(&start);
-
-			//while (getchar() != 32 || getchar() != ' ');		
-			while (!stop())
-
-				time(&end);
-
-			time_t czas = (difftime(end, start) / CLOCKS_PER_SEC);
-
-			float distance = *v * czas;
-
-			return dist; 
-		}
-		bool stop() { return false;}
-
-		void load() {}
-
-		int stay_in_traffic_jam() { return 0;}
+	//Car(const Car &_car) {
+	//
+	//
+	//	this->silnik = _car.silnik;		
+	//	wheels_quantity = _car.wheelq;
+	//    seet_quantity = _car.seetq;
+	//	door_quantity = _car.doorq;
+	//	window_quantity = _car.windowsq;
+	//	brand = _car.brand;
+	//	radio = _car.rad;
+	//	air_conditioning = _car.air;
+	//			   			
+	//}
 
 
 
-		void show() {
+	void setSilnik(string s) { silnik = s; }
+	void setWheels(int wh) { wheels_quantity = wh; }
+	void setSeets(int sits) { seet_quantity = sits; }
+	void setDoors(int doors) { door_quantity = doors; }
+	void setWindows(int window) { window_quantity = window; }
+	void setBrand(string _brand) { brand = _brand; }
+	void if_exist_Radio(bool r) { radio = r; }
+	void if_air_conditioning(bool a) { air_conditioning = a; }
 
-			cout << "Name: " << name << endl;
-			cout << "Motor: " << silnik << endl;
-			cout << "Rims name: " << felgi << endl;
-			cout << "Number of wheels: " << wheels_quantity << endl; //byla zmiana z wheelq na wheels_quantity
-			cout << "Numer of seets: " << seet_quantity << endl; //byla zmiana z sheelq na 
-			cout << "Numer of doors: " << door_quantity << endl; //byla zmiana doorq na wheels_quantity
-			cout << "Numer of windows: " << window_quantity << endl;  //byla zmiana windowsq na wheels_quantity
-			cout << "Brand: " << brand << endl;
-			cout << "Is threre Radio : " << radio << endl;
-			cout << "Is there Air Condition: " << air_conditioning << endl;
+
+	float go(float *v) {
+
+
+		int count = 0;
+		char liczba = '0';
+
+		clock_t start = clock();
+
+		cout << "wybierz numer: ";  cin >> liczba;
+
+		while (liczba != '2') {
+
+			count += 1;
+			cin.get(liczba);
 
 
 		}
-};
 
+		clock_t end = clock();
 
-class Builder {
+		float czas = (float)(end - start) / CLOCKS_PER_SEC;
 
-	protected:
+		distance = *v * czas;
 
-		 //shared_ptr<Car> car;
-		Car * car;
 
-	public:
-
-		void setCar() {
-
-			//shared_ptr<Car> car(new Car()); //dynamiczne alokowanie pamieci pod nowy samochod
-			car = new Car();
-		}
-
-		Car getCar() {
-			
-			return *car ;
-		}
-		 
-		virtual void buildName(string ) = 0;
-		virtual void buildSilnik(string ) = 0;
-		virtual void buildFelgi(string ) = 0;
-		virtual void buildWheels() = 0;
-		virtual void buildSeets(int ) = 0;
-		virtual void buildDoors(int ) = 0;
-		virtual void buildWindows(int ) = 0;
-		virtual void buildBrand(string ) = 0;
-		virtual void buildRadio(bool ) = 0;
-		virtual void buildAirCond(bool ) = 0;
-};
-
-class OffRoadCar: public Builder {
-
-	public:
-
-		OffRoadCar() : Builder() {}
-
-		void buildName(string  _name_) {
-
-			car->setName(_name_ = "Bla");
-
-		}
-		
-		void buildSilnik(string _silnik_) {
-
-			car->setSilnik(_silnik_ = "s");
-
-		}
-
-		void buildFelgi(string _felgi_) {
-			
-			car->setFelgi(_felgi_ ="f");
-
-		}
-
-		void buildWheels() {
-
-			car->setWheels(4);
-
-		}
-
-		void buildSeets(int  _seets_) {
-
-			car->setSeets(_seets_ = 0);
-				
-		}
-
-		void buildDoors(int _door_){
-		
-			car->setDoors(_door_= 0);
-		
-		}
-
-		void buildWindows(int _window_) {
-
-			car->setWindows(_window_= 0);
-		}
-
-		void buildBrand(string  _brand_) {
-
-			car->setBrand(_brand_ = "m&m");
-
-		}
-
-		void buildRadio(bool  rad) {
-
-			car->if_exist_Radio(rad = 0);
-		}
-
-		void buildAirCond(bool  air) {
-
-			car->if_air_conditioning(air = 0);
-		}
-		
-};
-
-class Director {
-
-	private:
-
-		Builder * builder;
-		string name;
-		string sil;
-		string felg;
-		int door;
-		int se;
-		int window;
-		string brand;
-		bool radio;
-		bool aircondition;
-
-
-	public:
-
-		void setBuilder(Builder * b) {
-
-			builder = b;
-		}
-
-		Car getCar() {
-
-			return builder->getCar();
-		}
-
-		void fill(string n) { name = n; }
-		void fill(string n, string s, string f, int d , int seet, 
-					int wind, string br, bool r, bool air ) {
-
-			name = n;
-			sil = s;
-			felg = f;
-			door = d;
-			se = seet;
-			window = wind;
-			brand = br;
-			radio = r;
-			aircondition = air;
-		}
-
-		void create() {
-
-			builder->setCar();
-			builder->buildName(name);
-			builder->buildSilnik(sil);
-			builder->buildFelgi(felg);
-			builder->buildWheels();
-			builder->buildSeets(se);
-			builder->buildDoors(door);
-			builder->buildWindows(window);
-			builder->buildBrand(brand);
-			builder->buildRadio(radio);
-			builder->buildAirCond(aircondition);
-			
-		}
-};
-
-
-
-int main() {
-
-	int number = 0, q_seets = 0 , q_wind = 0, q_doors = 0;
-	float vel = 0;
-	string name, motor, rims, brand;
-	bool rad = false, aircond = false;
-
-	Car car3("Cadet", "Wolkswagen ", "aluminiowe", 4, 4, 4, 6, "Opel");
-
-	cout << " Wprowadza dane do utworzenia nowego samochodu" << endl;
-	cout << "Name: ";  cin >> name;
-	/*cout << "Motor: ";  cin >> motor;
-	cout << "Felgi: ";  cin >> rims;
-	cout << "Ilosc miejsc: ";  cin >> q_seets;
-	cout << "Ilosc drzwi: ";  cin >> q_doors;
-	cout << "Ile okien: ";  cin >> q_wind;
-	cout << "Marka: ";  cin >> brand;
-	cout << "Czy ma byc klimatyzacja (true/false): ";  cin >> aircond;
-	cout << " Czy wbudowane radio (true/false): "; cin >> rad;*/
-
-
-	/*shared_ptr<Director> boss(new Director());
-	shared_ptr<Car> car(new Car());
-	shared_ptr<Builder> builder(new OffRoadCar());
-	shared_ptr<Builder> builder2(new OffRoadCar());*/
-
-	Director * boss = new Director();
-	Car * car = new Car();
-	Builder * builder = new OffRoadCar();
-	Builder * builder2 = new OffRoadCar();
-
-
-	boss->setBuilder(builder);
-	boss->fill(name);
-	//boss->fill(name, motor, rims, q_doors, q_seets, q_wind, brand, rad, aircond);	
-	boss->create();
-
-	Car car1 = boss->getCar();
-
-	boss->setBuilder(builder2);
-	//Car car2 (shared_ptr<Car> car1);
-
-	//boss->create();
-
-	//car2 = boss->getCar();
-
-	car1.show();
-	//car2.show();
-
-	car3.show();
-
-	cout << " WYbierz nume" << endl;
-	cout << "1: jedz" << endl;
-	cout << "2: stop" << endl;
-
-	
-
-	switch (number) {
-
-	case 1:
-		cin >> vel;
-		car3.go(&vel);
-
-	case 2: car3.stop();
-
+		return distance;
 	}
 
-	system("pause");
+	bool stop() { return false; }
 
-	return 0;
-}
+	void load() {}
+
+	int stay_in_traffic_jam() { return 0; }
+
+
+
+	void show() {
+
+
+		cout << "Motor: " << silnik << endl;
+		cout << "Number of wheels: " << wheels_quantity << endl; //byla zmiana z wheelq na wheels_quantity
+		cout << "Numer of seets: " << seet_quantity << endl; //byla zmiana z sheelq na 
+		cout << "Numer of doors: " << door_quantity << endl; //byla zmiana doorq na wheels_quantity
+		cout << "Numer of windows: " << window_quantity << endl;  //byla zmiana windowsq na wheels_quantity
+		cout << "Brand: " << brand << endl;
+		cout << "Is threre Radio : ";
+		if (radio == 0) { cout << "false" << endl; }
+		else { cout << "true" << endl; }
+		cout << "Is there Air Condition: ";
+		if (air_conditioning == 0) { cout << "false" << endl; }
+		else { cout << "true" << endl << endl; }
+
+	}
+};
+
