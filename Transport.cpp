@@ -85,7 +85,7 @@ class Carriage : public LandTransport {
 
 class Car : public MotorVechicles {
 	
-	string name, silnik, felgi, brand;
+	string name, silnik, felgi; //brand;
 	int  dist;
 	//int wheelq, seetq, doorq, windowsq,
 
@@ -170,13 +170,15 @@ class Builder {
 
 	protected:
 
-		 shared_ptr<Car> car;
+		 //shared_ptr<Car> car;
+		Car * car;
 
 	public:
 
 		void setCar() {
 
-			shared_ptr<Car> car(new Car()); //dynamiczne alokowanie pamieci pod nowy samochod
+			//shared_ptr<Car> car(new Car()); //dynamiczne alokowanie pamieci pod nowy samochod
+			car = new Car();
 		}
 
 		Car getCar() {
@@ -265,7 +267,7 @@ class Director {
 
 	private:
 
-		shared_ptr<Builder> builder;
+		Builder * builder;
 		string name;
 		string sil;
 		string felg;
@@ -279,7 +281,7 @@ class Director {
 
 	public:
 
-		void setBuilder(shared_ptr<Builder> b) {
+		void setBuilder(Builder * b) {
 
 			builder = b;
 		}
@@ -344,10 +346,16 @@ int main() {
 	cout << " Czy wbudowane radio (true/false): "; cin >> rad;*/
 
 
-	shared_ptr<Director> boss(new Director());
+	/*shared_ptr<Director> boss(new Director());
 	shared_ptr<Car> car(new Car());
 	shared_ptr<Builder> builder(new OffRoadCar());
-	shared_ptr<Builder> builder2(new OffRoadCar());
+	shared_ptr<Builder> builder2(new OffRoadCar());*/
+
+	Director * boss = new Director();
+	Car * car = new Car();
+	Builder * builder = new OffRoadCar();
+	Builder * builder2 = new OffRoadCar();
+
 
 	boss->setBuilder(builder);
 	boss->fill(name);
@@ -357,7 +365,8 @@ int main() {
 	Car car1 = boss->getCar();
 
 	boss->setBuilder(builder2);
-	Car car2 (shared_ptr<Car> car1);
+	//Car car2 (shared_ptr<Car> car1);
+
 	//boss->create();
 
 	//car2 = boss->getCar();
@@ -371,6 +380,8 @@ int main() {
 	cout << "1: jedz" << endl;
 	cout << "2: stop" << endl;
 
+	
+
 	switch (number) {
 
 	case 1:
@@ -380,6 +391,8 @@ int main() {
 	case 2: car3.stop();
 
 	}
+
+	system("pause");
 
 	return 0;
 }
