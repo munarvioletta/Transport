@@ -4,39 +4,113 @@
 #include <string>
 #include <memory> 
 #include <cstdio>
-#include"Transport.h"
 
-using std::cout;
-using std::cin;
-using std::endl;
-using std::string;
+using namespace std;
 
-float Transport::go(float *) {}
-bool Transport::stop() {}
-void Transport::load() {}
+class Transport {
 
+public:
 
-int LandTransport::stay_in_traffic_jam() {}
-float LandTransport::go(float * velocity) { return 0; }
-bool LandTransport::stop() { return 0; }
-void LandTransport::load() { cout << "Loading continiue"; }
+	virtual float go(float *) = 0;
+	virtual bool stop() = 0;
+	virtual void load() = 0;
+
+};
 
 
-float MotorVechicles:: go(float *) { return 0; }
-bool MotorVechicles::stop() { return false; }
-void MotorVechicles::load() {}
-int MotorVechicles::stay_in_traffic_jam() { return 0; }
+class LandTransport : public Transport {
 
-int MotorVechicles::getWheels() { return  wheels_quantity; }
-int MotorVechicles::getSeets() { return seet_quantity; }
-int MotorVechicles::getDoors() { return door_quantity; }
-int MotorVechicles::getWindow() { return window_quantity; }
-string MotorVechicles::getBrand() { return brand; }
-bool MotorVechicles::getRadio() { return radio; }
-bool MotorVechicles::getAirCond() { return air_conditioning; }
+protected:
 
-	Car::Car() {}
-	
+	int seet_quantity = 0, door_quantity = 0, window_quantity = 0;
+	bool radio, air_conditioning;
+
+public:
+
+	virtual int stay_in_traffic_jam() = 0;
+
+	LandTransport() {}
+	LandTransport(int sq, int dq, int windq, bool r, bool air) : seet_quantity(sq), door_quantity(dq), window_quantity(windq),
+		radio(r), air_conditioning(air) {}
+	virtual ~LandTransport() {}
+
+	float go(float * velocity) { return 0; }
+	bool stop() { return 0; }
+	void load() {}
+
+};
+
+
+class RailVechicle : public LandTransport {
+
+protected:
+
+	int carriage_quantity;
+
+public:
+	RailVechicle() {}
+	RailVechicle(int carrq) : carriage_quantity(carrq) {}
+	virtual ~RailVechicle() {}
+};
+
+class MotorVechicles : public LandTransport {
+
+protected:
+
+	int wheels_quantity;
+	string brand;
+
+public:
+
+	MotorVechicles() {}
+	MotorVechicles(int wq, int sq, int dq, int windq, bool r, bool air, string br) : wheels_quantity(wq), LandTransport(sq, dq, windq, r, air), brand(br) {}
+
+	float go(float *) { return 0; }
+	bool stop() { return false; }
+	void load() {}
+	int stay_in_traffic_jam() { return 0; }
+
+	int & getWheels() { return  wheels_quantity; }
+	int getSeets() { return seet_quantity; }
+	int getDoors() { return door_quantity; }
+	int getWindow() { return window_quantity; }
+	string getBrand() { return brand; }
+	bool getRadio() { return radio; }
+	bool getAirCond() { return air_conditioning; }
+};
+
+class Train : public RailVechicle {
+
+protected:
+
+	string name, marka;
+
+public:
+
+	Train(string _name, string _marka, int _carriage_quantity) : name(_name), marka(_marka), RailVechicle(_carriage_quantity) {}
+
+};
+
+class Carriage : public LandTransport {
+
+
+};
+
+
+class Car : public MotorVechicles {
+
+	string silnik, brand = getBrand();
+	float distance = 0;
+	int wheelq = getWheels(), seetq = getSeets(), doorq = getDoors(), windowsq = getWindow();
+	bool rad = getRadio(), air = getAirCond();
+
+public:
+
+	Car() {}
+	Car(string _silnik, int wq, int sq, int dq, int windq, string _brand, bool _r, bool _air) :
+		silnik(_silnik),
+		MotorVechicles(wq, sq, dq, windq, _r, _air, _brand) {}
+
 	//Car(const Car &_car) {
 	//
 	//
@@ -53,17 +127,17 @@ bool MotorVechicles::getAirCond() { return air_conditioning; }
 
 
 
-	void Car::setSilnik(string s) { silnik = s; }
-	void Car::setWheels(int wh) { wheels_quantity = wh; }
-	void Car::setSeets(int sits) { seet_quantity = sits; }
-	void Car::setDoors(int doors) { door_quantity = doors; }
-	void Car:: setWindows(int window) { window_quantity = window; }
-	void Car::setBrand(string _brand) { brand = _brand; }
-	void Car::if_exist_Radio(bool r) { radio = r; }
-	void Car::if_air_conditioning(bool a) { air_conditioning = a; }
+	void setSilnik(string s) { silnik = s; }
+	void setWheels(int wh) { wheels_quantity = wh; }
+	void setSeets(int sits) { seet_quantity = sits; }
+	void setDoors(int doors) { door_quantity = doors; }
+	void setWindows(int window) { window_quantity = window; }
+	void setBrand(string _brand) { brand = _brand; }
+	void if_exist_Radio(bool r) { radio = r; }
+	void if_air_conditioning(bool a) { air_conditioning = a; }
 
 
-	float Car::go(float *v) {
+	float go(float *v) {
 
 
 		int count = 0;
@@ -91,15 +165,15 @@ bool MotorVechicles::getAirCond() { return air_conditioning; }
 		return distance;
 	}
 
-	bool Car::stop() { return false; }
+	bool stop() { return false; }
 
-	void Car::load() {}
+	void load() {}
 
-	int Car::stay_in_traffic_jam() { return 0; }
+	int stay_in_traffic_jam() { return 0; }
 
 
 
-	void Car::show() {
+	void show() {
 
 
 		cout << "Motor: " << silnik << endl;
