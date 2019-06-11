@@ -4,9 +4,9 @@
 #include <memory> 
 #include <cstdio>
 
-#include "RailVechicle.cpp"
+
 #include "Transport.cpp"
-#include "LandTransport.cpp"
+
 
 
 using namespace std;
@@ -153,31 +153,19 @@ class Director {
 };
 
 
+void cteate_car_menu(string *, int *, int *, int*, string*, string*, bool*, bool*);
 
 int main() {
 
-	int number = 0, q_seets = 0 , q_wind = 0, q_doors = 0;
-	float vel = 0;
+	int q_seets{ 0 }, q_wind{ 0 }, q_doors{ 0 }, number{ 0 };
+	float vel{ 0 };
 	string name, motor, rims, brand;
-	bool rad = false, aircond = false;
+	bool rad{ false }, aircond{ false };
 	string num;
 
 	Car car1("Wolkswagen ", 4, 4, 4, 6, "Opel", true, true);
 
-	cout << " Wprowadza dane do utworzenia nowego samochodu" << endl;
-	cout << "Motor: ";  cin >> motor;	
-	cout << "Ilosc drzwi: ";  cin >> q_doors;
-	cout << "Ilosc miejsc: ";  cin >> q_seets;	
-	cout << "Ile okien: ";  cin >> q_wind;
-	cout << "Marka: ";  cin >> brand;
-	cout << "Czy ma byc klimatyzacja (true/false): ";  cin>>num;
-
-		if (num == "true") { aircond = 1; }		
-		else{ aircond = 0; }
-
-	cout << " Czy wbudowane radio (true/false): "; cin>>num;
-		if (num == "true") { rad = 1; }
-		else { rad = 0; }
+	cteate_car_menu( &motor, &q_doors, &q_seets, &q_wind, &brand, &num, &aircond, &rad); //!< Menu wyboru 
 
 	Director * boss = new Director();
 	Car * car = new Car[4];
@@ -196,39 +184,25 @@ int main() {
 
 	Car car2 (car1);
 	car[2] = car2;
-	
-	cout << " Wprowadza dane do utworzenia nowego samochodu" << endl;
-	cout << "Motor: ";  cin >> motor;
-	cout << "Ilosc drzwi: ";  cin >> q_doors;
-	cout << "Ilosc miejsc: ";  cin >> q_seets;
-	cout << "Ile okien: ";  cin >> q_wind;
-	cout << "Marka: ";  cin >> brand;
-	cout << "Czy ma byc klimatyzacja (true/false): ";  cin >> num;
 
-	if (num == "true") { aircond = 1; }
-	else { aircond = 0; }
-
-	cout << " Czy wbudowane radio (true/false): "; cin >> num;
-	if (num == "true") { rad = 1; }
-	else { rad = 0; }
+	cteate_car_menu(&motor, &q_doors, &q_seets, &q_wind, &brand, &num, &aircond, &rad); //!< Menu wyboru 	
 
 	boss->setBuilder(builder2);
 	boss->fill(motor, q_doors, q_seets, q_wind, brand, rad, aircond);
 	boss->create();
 	car[3] = boss->getCar();	
 
-
-
+	
 	int car_lenght = sizeof(car);		
 	cout << endl;
 	
 
-		for (int i = 0; i < car_lenght; i++) {
+	for (int i = 0; i < car_lenght; i++) {
 
-			cout << "\n Samochod :" << i+1 << endl<<endl;
-			car[i].show();
+		cout << "\n Samochod :" << i+1 << endl<<endl;
+		car[i].show();
 
-		}
+	}
 
 
 	cout << " WYbierz numer :" << endl;
@@ -258,16 +232,20 @@ int main() {
 
 
 		case 1:
+
 			cout << "wpisz predkosc dla samochodu w km/h: ";
 			cin >> vel;
 			dist[i] = (float)car[i].go(&vel);
 			i++;
+
+			break;
 
 
 		case 2: 
 			
 			car[0].stop();
 			number = {0};
+			break;
 			
 		case 3:
 
@@ -278,7 +256,14 @@ int main() {
 				cout<<j<<":" << dist[j] <<"km"<< endl;
 
 			}
-		case 4: break;
+
+			break;
+
+		case 4: 
+			
+			exit;
+
+			break;
 
 		}
 
@@ -287,4 +272,25 @@ int main() {
 	system("pause");
 
 	return 0;
+}
+
+
+void cteate_car_menu(string *m, int *q_d, int *q_s, int *q_w, string *br, string *n, bool *air, bool *_radio) {
+
+
+	cout << " Choose the equipment for your car" << endl;
+	cout << "Motor brand: ";  cin >> *m;
+	cout << "Ilosc drzwi: ";  cin >> *q_d;
+	cout << "Ilosc miejsc: ";  cin >> *q_s;
+	cout << "Ile okien: ";  cin >> *q_w;
+	cout << "Marka: ";  cin >> *br;
+	cout << "Czy ma byc klimatyzacja (true/false): ";  cin >> *n;
+
+	if (*n == "true") { *air = 1; }
+	else { *air = 0; }
+
+	cout << " Czy wbudowane radio (true/false): "; cin >> *n;
+	if (*n == "true") { *_radio = 1; }
+	else { _radio = 0; }
+
 }
