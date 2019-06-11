@@ -177,10 +177,10 @@ public:
 
 
 		cout << "Motor: " << silnik << endl;
-		cout << "Number of wheels: " << wheels_quantity << endl; //byla zmiana z wheelq na wheels_quantity
-		cout << "Numer of seets: " << seet_quantity << endl; //byla zmiana z sheelq na 
-		cout << "Numer of doors: " << door_quantity << endl; //byla zmiana doorq na wheels_quantity
-		cout << "Numer of windows: " << window_quantity << endl;  //byla zmiana windowsq na wheels_quantity
+		cout << "Number of wheels: " << wheels_quantity << endl; 
+		cout << "Numer of seets: " << seet_quantity << endl; 
+		cout << "Numer of doors: " << door_quantity << endl; 
+		cout << "Numer of windows: " << window_quantity << endl;  
 		cout << "Brand: " << brand << endl;
 		cout << "Is threre Radio : ";
 		if (radio == 0) { cout << "false" << endl; }
