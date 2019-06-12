@@ -270,6 +270,11 @@ int main() {
 
 	}
 
+	
+	delete [] dist;
+	delete [] car;
+	delete boss, builder, builder2;
+	
 	system("pause");
 
 	return 0;
