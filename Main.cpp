@@ -211,7 +211,7 @@ int main() {
 	cout << "3: wyniki" << endl;
 	cout << "4: exit" << endl;
 
-	float * dist = new float[0];
+	float * dist = new float[0]; /*! table of distances*/
 	int i = 0;
 
 
@@ -226,8 +226,7 @@ int main() {
 		cout << " WYbierz numer :" << endl;
 		cin >> number;
 
-
-
+		
 		switch (number) {
 
 
@@ -269,6 +268,10 @@ int main() {
 
 	}
 
+	delete [] dist;
+	delete [] car;
+	delete boss, builder, builder2;
+
 	system("pause");
 
 	return 0;
@@ -286,11 +289,13 @@ void cteate_car_menu(string *m, int *q_d, int *q_s, int *q_w, string *br, string
 	cout << "Marka: ";  cin >> *br;
 	cout << "Czy ma byc klimatyzacja (true/false): ";  cin >> *n;
 
-	if (*n == "true") { *air = 1; }
-	else { *air = 0; }
+	if (*n == "false") { *air = 0; }
+	else if (*n == "true") { *air = 1; }
+	else { cout<<"Niepoprawsa wartosc, wpisz true albo false"<<endl; }
 
 	cout << " Czy wbudowane radio (true/false): "; cin >> *n;
-	if (*n == "true") { *_radio = 1; }
-	else { _radio = 0; }
+	if (*n == "false") { *_radio = 0; }
+	else if (*n == "true") { *_radio = 1; }
+	else { cout << "Niepoprawsa wartosc, wpisz true albo false" << endl; }
 
 }
