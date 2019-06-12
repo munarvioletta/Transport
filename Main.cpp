@@ -7,8 +7,6 @@
 
 #include "Transport.cpp"
 
-
-
 using namespace std;
 
 
@@ -211,7 +209,7 @@ int main() {
 	cout << "3: wyniki" << endl;
 	cout << "4: exit" << endl;
 
-	float * dist = new float[0]; /*! table of distances*/
+	float * dist = new float[0];
 	int i = 0;
 
 
@@ -226,7 +224,8 @@ int main() {
 		cout << " WYbierz numer :" << endl;
 		cin >> number;
 
-		
+
+
 		switch (number) {
 
 
@@ -268,10 +267,11 @@ int main() {
 
 	}
 
+	
 	delete [] dist;
 	delete [] car;
 	delete boss, builder, builder2;
-
+	
 	system("pause");
 
 	return 0;
@@ -280,22 +280,66 @@ int main() {
 
 void cteate_car_menu(string *m, int *q_d, int *q_s, int *q_w, string *br, string *n, bool *air, bool *_radio) {
 
-
+	
 	cout << " Choose the equipment for your car" << endl;
+
 	cout << "Motor brand: ";  cin >> *m;
-	cout << "Ilosc drzwi: ";  cin >> *q_d;
-	cout << "Ilosc miejsc: ";  cin >> *q_s;
-	cout << "Ile okien: ";  cin >> *q_w;
+
+
+		while (1) {
+
+			cout << "Ilosc drzwi: ";  
+
+			if (!(cin >> *q_d)) {
+
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "You have entered wrong input" << endl;
+			}
+
+			else { break; }
+		}
+
+
+		while (1) {
+
+			cout << "Ilosc miejsc: ";  
+
+			if (!(cin >> *q_s)) {
+
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "You have entered wrong input" << endl;
+
+
+			}
+			else  { break; }
+		}
+
+		while (1) {
+
+			cout << "Ile okien: "; 
+
+			if (!(cin >> *q_w)) {
+
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "You have entered wrong input" << endl;
+
+			}
+
+			else { break; }
+		}
+
+	
 	cout << "Marka: ";  cin >> *br;
 	cout << "Czy ma byc klimatyzacja (true/false): ";  cin >> *n;
 
-	if (*n == "false") { *air = 0; }
-	else if (*n == "true") { *air = 1; }
-	else { cout<<"Niepoprawsa wartosc, wpisz true albo false"<<endl; }
+	if (*n == "true") { *air = 1; }
+	else { *air = 0; }
 
 	cout << " Czy wbudowane radio (true/false): "; cin >> *n;
-	if (*n == "false") { *_radio = 0; }
-	else if (*n == "true") { *_radio = 1; }
-	else { cout << "Niepoprawsa wartosc, wpisz true albo false" << endl; }
+	if (*n == "true") { *_radio = 1; }
+	else { _radio = 0; }
 
 }
